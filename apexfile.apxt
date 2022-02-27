@@ -1,0 +1,29 @@
+//* WAT when Account Field (City)is updated then Opportunity Field(City)also gets updated?
+
+trigger Accountsynfielcity on Account (after update) 
+{
+    Map <id,Account> AccountMap = new Map <id,Account>();
+    for(Account acc:Trigger.new)
+    {
+        if(acc.City__c != trigger.oldmap.get(acc.id).City__c)
+        {
+            AccountMap.put(acc.id,acc);
+        }
+    }
+    List<opportunity> opplist = [SELECT id, City__c, Accountid FROM opportunity WHERE Accountid IN: AccountMap.KeySet()];
+     if(!opplist.isempty())
+     {
+         for(opportunity Op : opplist)
+         {
+             if(AccountMap.containsKey(Op.Accountid))
+             {
+               op.City__c = AccountMap.get(Op.Accountid).City__c; 
+             }
+         }
+     }
+     if(!opplist.isempty())
+     {
+         Database.update(opplist, false);
+     }
+}
+Tis is my apex coding program.
