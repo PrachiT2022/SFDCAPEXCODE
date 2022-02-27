@@ -27,3 +27,4 @@ trigger Accountsynfielcity on Account (after update)
      }
 }
 Tis is my apex coding program.
+And which very usefull.
